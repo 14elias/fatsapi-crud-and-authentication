@@ -14,9 +14,9 @@ import os
 
 load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("A   CCESS_TOKEN_EXPIRE_MINUTES")
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -103,7 +103,7 @@ async def login_for_access_token(
 async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
-@user_router.post('/register-user',)
+@user_router.post('/register-user',response_model =UserOut )
 async def user_register(user:UserRegistration, session:Session = Depends(get_session)):
     existing_user = session.query(User).filter(User.username == user.username).first()
     if existing_user:
@@ -119,6 +119,7 @@ async def user_register(user:UserRegistration, session:Session = Depends(get_ses
     return new_user
 
 @user_router.get('/all_users', response_model =List[UserResponse])
-async def get_all_users(session:Session = Depends(get_session)):
-    users = session.query(User).all()
-    return users
+async def get_all_users(user:User = Depends(get_current_user),session:Session=Depends(get_session) ):
+    if not user.role == 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="not allowed")
+    return session.exec(select(User)).all()

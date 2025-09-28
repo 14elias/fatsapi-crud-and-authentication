@@ -8,3 +8,4 @@ class User(SQLModel, table=True):
     full_name: Optional[str] = None
     hashed_password: str
     disabled: bool = False
+    role:str = Field(default='user')
