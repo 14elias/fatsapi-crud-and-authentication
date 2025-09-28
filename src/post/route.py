@@ -26,6 +26,7 @@ async def get_post(post_id:int,session:Session =Depends(get_session)):
         raise HTTPException(status_code=404, detail="Item not found")
     return post
 
+
 @post_router.patch('/update_post/{post_id}')
 async def update_book(post_id:int, data:CreatePost, session:Session=Depends(get_session)):
     post = session.get(Post,post_id)
@@ -37,6 +38,7 @@ async def update_book(post_id:int, data:CreatePost, session:Session=Depends(get_
     session.commit()
     session.refresh(post)
     return post
+
 
 @post_router.delete('/delete_post/{post_id}')
 async def delete_post(post_id:int, session:Session=Depends(get_session)):
