@@ -5,7 +5,9 @@ import os
 
 load_dotenv()
 
-DATABASE_URL =os.getenv("DATABASE_URL")  # change later to PostgreSQL if needed
+# DATABASE_URL =os.getenv("DATABASE_URL") 
+DATABASE_URL = "mysql+pymysql://root:Ee%40712141516@localhost:3306/fastapi"
+ # change later to PostgreSQL if needed
 engine = create_engine(DATABASE_URL, echo=True)
 
 # function to create tables

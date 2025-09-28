@@ -4,7 +4,7 @@ from sqlmodel import Session,select
 from .data import get_session
 from .schema import Book, BookCreate
 
-book_router = APIRouter()
+book_router = APIRouter(tags=["Book"])
 
 
 
