@@ -3,6 +3,7 @@ from src.book.route import book_router
 from src.book.data import init_db
 from src.auth.utility import user_router
 from src.post.route import post_router
+from .config import setting
 
 version = 'v1'
 

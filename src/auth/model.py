@@ -1,5 +1,10 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field,Relationship
 from typing import Optional
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..post.model import Post
+
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -9,3 +14,5 @@ class User(SQLModel, table=True):
     hashed_password: str
     disabled: bool = False
     role:str = Field(default='user')
+
+    posts:list["Post"] = Relationship(back_populates='owner')
