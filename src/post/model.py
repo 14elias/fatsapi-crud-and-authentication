@@ -16,3 +16,7 @@ class Post(SQLModel,table=True):
     owner_id:int =Field(foreign_key="user.id",ondelete="CASCADE")
 
     owner:Optional["User"]=Relationship(back_populates='posts')
+
+class Likes(SQLModel, table=True):
+    post_id:int=Field(foreign_key="post.id",ondelete="CASCADE",primary_key=True)
+    user_id:int=Field(foreign_key="user.id",ondelete="CASCADE",primary_key=True)

@@ -16,3 +16,13 @@ class PostOut(CreatePost):
 
     class config:
         from_orm=True
+
+class PostOutVote(BaseModel):
+    Post:PostOut
+    likes:int
+
+
+
+class Vote(BaseModel):
+    post_id:int
+    dir:int
