@@ -6,6 +6,7 @@ class Book(SQLModel, table=True):
     title : str
     published_date : str
     author : str
+    pagenumber:int
 
 class BookCreate(SQLModel):
     title : str
