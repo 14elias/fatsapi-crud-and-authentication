@@ -11,7 +11,11 @@ app = FastAPI(
 )
 
 
+@app.get("/")
+def read_root():
+    return {"message": "Hello from FastAPI on Render!"}
 
+    
 app.include_router(user_router, prefix=f'/api/{version}/users')
 app.include_router(post_router)
 
