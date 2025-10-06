@@ -100,11 +100,12 @@ async def login_for_access_token(
 async def read_users_me(current_user: Annotated[User, Depends(get_current_active_user)]):
     return current_user
 
-@user_router.post('/register-user',response_model =UserOut )
+
+@user_router.post('/register-user',response_model =UserOut,status_code=201 )
 async def user_register(user:UserRegistration, session:Session = Depends(get_session)):
     existing_user = session.query(User).filter(User.username == user.username).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="user already registered")
+        raise HTTPException(status_code=409, detail="user already registered")
     new_user = User(
         username=user.username, email = user.email,
         hashed_password=get_password_hash(user.password),
@@ -114,6 +115,7 @@ async def user_register(user:UserRegistration, session:Session = Depends(get_ses
     session.commit()
     session.refresh(new_user)
     return new_user
+
 
 @user_router.get('/all_users', response_model =List[UserResponse])
 async def get_all_users(user:User = Depends(get_current_user),session:Session=Depends(get_session) ):
