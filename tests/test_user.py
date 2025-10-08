@@ -59,3 +59,11 @@ def test_incorrect_login(client,test_user,username,password,status_code):
 def test_user_login_dontexist(client):
     res = client.post('api/v1/users/token',data={"username":"ella","password":"el123"})
     assert res.status_code == 401
+
+
+def test_fetching_me(client,token,test_user):
+    res=client.get('api/v1/users/me',headers={"Authorization": f"Bearer {token}"})
+
+    print(res)
+    assert res.status_code == 200
+    assert res.json().get('username') == test_user['username']
