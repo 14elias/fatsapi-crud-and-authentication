@@ -17,7 +17,7 @@ def session_fixture():
     f"{setting.database_password}@{setting.database_host}:"
     f"{setting.database_port}/{setting.database_name}_test"
 ) 
-    engine = create_engine(DATABASE_URL, echo=True)
+    engine = create_engine(DATABASE_URL, echo=False)
 
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
