@@ -50,7 +50,7 @@ async def get_post(post_id:int,session:Session =Depends(get_session)):
     return post
 
 
-@post_router.patch('/update_post/{post_id}')
+@post_router.patch('/update_post/{post_id}',response_model=PostOut)
 async def update_book(post_id:int, data:CreatePost, session:Session=Depends(get_session),
                       current_user:User=Depends(get_current_user)
 ):
@@ -67,7 +67,7 @@ async def update_book(post_id:int, data:CreatePost, session:Session=Depends(get_
     return post
 
 
-@post_router.delete('/delete_post/{post_id}')
+@post_router.delete('/delete_post/{post_id}',status_code=204)
 async def delete_post(post_id:int, session:Session=Depends(get_session),current_user:User=Depends(get_current_user)):
     statement = select(Post).where((Post.owner_id==current_user.id)&(Post.id==post_id))
     post = session.exec(statement).first()

@@ -1,6 +1,6 @@
 import pytest
 from src.post.model import Post
-from src.post.schema import PostOut
+from src.post.schema import PostOutVote,PostOut
 
 @pytest.fixture(name="create_post")
 def create_post(test_user,session):
@@ -60,9 +60,38 @@ def test_unauthorized_create_post(client):
 def test_get_a_post(client,token,create_post):
     response = client.get('/get_a_post/1', headers={"Authorization":f"Bearer {token}"})
 
-    post = PostOut(**response.json())
-    print(post)
+    post = PostOutVote(**response.json())
 
     assert response.status_code == 200
     assert post.Post.title == create_post.title
 
+
+def test_update_post(client,token,create_post):
+    data ={
+        "title":"updated_title",
+        "description":"updated description"
+    }
+    res=client.patch("/update_post/1", json=data, headers={"Authorization":f"Bearer {token}"})
+    print(res.json())
+    post = PostOut(**res.json())
+
+    assert res.status_code == 200
+    assert post.title == data['title']
+
+
+def test_delete_post(client,token,create_post):
+    res = client.delete('/delete_post/1', headers = {"Authorization":f"Bearer {token}"})
+
+    assert res.status_code == 204
+
+
+def test_unautherized_delete_post(client,create_post):
+    res = client.delete('/delete_post/1', headers = {"Authorization":f"Bearer "})
+
+    assert res.status_code == 401
+
+
+def test_delete_not_found_post(client,token):
+    res = client.delete('/delete_post/1', headers = {"Authorization":f"Bearer {token}"})
+
+    assert res.status_code == 404
